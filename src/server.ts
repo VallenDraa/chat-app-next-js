@@ -1,8 +1,8 @@
 import { createServer } from 'node:http';
 import next from 'next';
 import { Server } from 'socket.io';
-import { env } from './env';
-import { initWebsocket } from './server/websocket';
+import { env } from '~/env';
+import { initWebsocket } from '~/server/websocket';
 
 const dev = env.NODE_ENV !== 'production';
 const hostname = 'localhost';
