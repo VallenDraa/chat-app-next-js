@@ -1,30 +1,38 @@
 import { createServer } from 'node:http';
 import next from 'next';
 import { Server } from 'socket.io';
-import { env } from '~/env';
+import nextEnv from '@next/env';
 import { initWebsocket } from '~/server/websocket';
 
-const dev = env.NODE_ENV !== 'production';
-const hostname = 'localhost';
-const port = 3000;
+nextEnv.loadEnvConfig(process.cwd(), process.env.NODE_ENV !== 'production');
 
-// When using middleware `hostname` and `port` must be provided below
-const app = next({ dev, hostname, port });
-const handler = app.getRequestHandler();
+async function main() {
+  const env = await import('~/env').then(m => m.env);
 
-void app.prepare().then(() => {
-  // eslint-disable-next-line @typescript-eslint/no-misused-promises
-  const httpServer = createServer(handler);
-  const ws = new Server(httpServer);
+  const dev = env.NODE_ENV !== 'production';
+  const hostname = 'localhost';
+  const port = 3000;
 
-  initWebsocket(ws);
+  // When using middleware `hostname` and `port` must be provided below
+  const app = next({ dev, hostname, port });
+  const handler = app.getRequestHandler();
 
-  httpServer
-    .once('error', err => {
-      console.error(err);
-      process.exit(1);
-    })
-    .listen(port, () => {
-      console.log(`> Ready on http://${hostname}:${port}`);
-    });
-});
+  void app.prepare().then(() => {
+    // eslint-disable-next-line @typescript-eslint/no-misused-promises
+    const httpServer = createServer(handler);
+    const ws = new Server(httpServer);
+
+    initWebsocket(ws);
+
+    httpServer
+      .once('error', err => {
+        console.error(err);
+        process.exit(1);
+      })
+      .listen(port, () => {
+        console.log(`> Ready on http://${hostname}:${port}`);
+      });
+  });
+}
+
+main();

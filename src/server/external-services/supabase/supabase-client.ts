@@ -1,13 +1,10 @@
 import { createServerClient, type CookieOptions } from '@supabase/ssr';
-import { cookies } from 'next/headers';
-import { env } from '~/env';
+import { type cookies } from 'next/headers';
 
-export function createClient() {
-  const cookieStore = cookies();
-
-  return createServerClient(
-    env.NEXT_PUBLIC_SUPABASE_URL,
-    env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
+export const createClient = (cookieStore: ReturnType<typeof cookies>) =>
+  createServerClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
     {
       cookies: {
         get(name: string) {
@@ -34,6 +31,3 @@ export function createClient() {
       },
     },
   );
-}
-
-export const supabase = createClient();

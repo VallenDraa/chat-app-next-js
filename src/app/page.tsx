@@ -1,7 +1,7 @@
 'use client';
 
 import * as React from 'react';
-import { socket } from '~/utils/socket';
+import { socket } from '~/utils';
 
 export default function Home() {
   const [isConnected, setIsConnected] = React.useState(false);
