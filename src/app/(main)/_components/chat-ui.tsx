@@ -1,9 +1,16 @@
 'use client';
 
 import * as React from 'react';
+import { type Message } from '~/types';
 import { socket } from '~/utils';
 
-export default function Home() {
+export type ChatUiProps = {
+  messages: Message[];
+};
+
+export function ChatUi(props: ChatUiProps) {
+  const { messages } = props;
+
   const [isConnected, setIsConnected] = React.useState(false);
   const [transport, setTransport] = React.useState('N/A');
 
@@ -39,6 +46,12 @@ export default function Home() {
     <div>
       <p>Status: {isConnected ? 'connected' : 'disconnected'}</p>
       <p>Transport: {transport}</p>
+
+      {messages.map(message => (
+        <div key={message.id}>
+          <p>{message.content}</p>
+        </div>
+      ))}
     </div>
   );
 }

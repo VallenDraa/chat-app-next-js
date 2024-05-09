@@ -2,6 +2,7 @@ import { createServerClient, type CookieOptions } from '@supabase/ssr';
 import { NextResponse, type NextRequest } from 'next/server';
 import { PROTECTED_ROUTES } from '~/constants';
 import { env } from '~/env';
+import { type Database } from '~/types';
 
 /**
  * Updates sesssion and enforce protected routes
@@ -12,7 +13,7 @@ export async function updateSession(request: NextRequest) {
   const { pathname } = request.nextUrl;
   let response = NextResponse.next({ request: { headers: request.headers } });
 
-  const supabase = createServerClient(
+  const supabase = createServerClient<Database>(
     env.NEXT_PUBLIC_SUPABASE_URL,
     env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
     {
