@@ -18,6 +18,8 @@ import { Input } from '~/components/ui/input';
 import { PasswordInput } from '~/components/ui/password-input';
 import { toast } from 'sonner';
 import { getErrorMessage } from '~/utils/error';
+import HCaptcha from '@hcaptcha/react-hcaptcha';
+import { env } from '~/env';
 
 export const registerValidator = z.object({
   email: z.string().email(),
@@ -27,6 +29,9 @@ export const registerValidator = z.object({
 export type Register = z.infer<typeof registerValidator>;
 
 export function RegisterForm() {
+  const captcha = React.useRef<HCaptcha>(null);
+  const [captchaToken, setCaptchaToken] = React.useState<string | null>(null);
+
   const form = useForm<Register>({
     resolver: zodResolver(registerValidator),
     defaultValues: { email: '', password: '' },
@@ -36,11 +41,13 @@ export function RegisterForm() {
 
   async function onSubmit(data: Register) {
     try {
-      await register(data.email, data.password);
+      await register(data.email, data.password, captchaToken);
     } catch (error) {
       const errorMessage = getErrorMessage(error);
       toast.error(errorMessage);
     }
+
+    captcha.current?.resetCaptcha();
   }
 
   return (
@@ -72,6 +79,14 @@ export function RegisterForm() {
               <FormMessage />
             </FormItem>
           )}
+        />
+
+        <HCaptcha
+          ref={captcha}
+          sitekey={env.NEXT_PUBLIC_HCAPTCHA_SITEKEY}
+          onVerify={token => {
+            setCaptchaToken(token);
+          }}
         />
 
         <SubmitButton isSubmitting={isSubmitting}>register</SubmitButton>

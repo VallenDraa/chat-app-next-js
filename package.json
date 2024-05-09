@@ -10,6 +10,7 @@
     "start": "NODE_ENV=production tsx src/server.ts"
   },
   "dependencies": {
+    "@hcaptcha/react-hcaptcha": "^1.10.1",
     "@hookform/resolvers": "^3.3.4",
     "@next/env": "^14.2.3",
     "@radix-ui/react-icons": "^1.3.0",

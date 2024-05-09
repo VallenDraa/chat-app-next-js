@@ -18,6 +18,8 @@ import { PasswordInput } from '~/components/ui/password-input';
 import { login } from '~/server/actions';
 import { toast } from 'sonner';
 import { getErrorMessage } from '~/utils/error';
+import HCaptcha from '@hcaptcha/react-hcaptcha';
+import { env } from '~/env';
 
 export const loginValidator = z.object({
   email: z.string().email(),
@@ -27,6 +29,9 @@ export const loginValidator = z.object({
 export type Login = z.infer<typeof loginValidator>;
 
 export function LoginForm() {
+  const captcha = React.useRef<HCaptcha>(null);
+  const [captchaToken, setCaptchaToken] = React.useState<string | null>(null);
+
   const form = useForm<Login>({
     resolver: zodResolver(loginValidator),
     defaultValues: { email: '', password: '' },
@@ -36,7 +41,7 @@ export function LoginForm() {
 
   async function onSubmit(data: Login) {
     try {
-      await login(data.email, data.password);
+      await login(data.email, data.password, captchaToken);
     } catch (error) {
       const errorMessage = getErrorMessage(error);
       toast.error(errorMessage);
@@ -72,6 +77,14 @@ export function LoginForm() {
               <FormMessage />
             </FormItem>
           )}
+        />
+
+        <HCaptcha
+          ref={captcha}
+          sitekey={env.NEXT_PUBLIC_HCAPTCHA_SITEKEY}
+          onVerify={token => {
+            setCaptchaToken(token);
+          }}
         />
 
         <SubmitButton isSubmitting={isSubmitting}>login</SubmitButton>
