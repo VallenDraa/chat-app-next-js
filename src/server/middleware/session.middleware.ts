@@ -9,7 +9,7 @@ import { type Database } from '~/types';
  * @param request
  * @returns
  */
-export async function updateSession(request: NextRequest) {
+export async function sessionMiddleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
   let response = NextResponse.next({ request: { headers: request.headers } });
 

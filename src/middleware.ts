@@ -1,8 +1,16 @@
 import { type MiddlewareConfig, type NextRequest } from 'next/server';
-import { updateSession } from '~/server/external-services/supabase';
+import { sessionMiddleware } from '~/server/middleware';
+import { AUTH_ROUTES } from './constants';
+import { authRoutesMiddleware } from '~/server/middleware';
 
 export async function middleware(request: NextRequest) {
-  return updateSession(request);
+  const { pathname } = request.nextUrl;
+
+  if (AUTH_ROUTES.includes(pathname)) {
+    return authRoutesMiddleware();
+  }
+
+  return sessionMiddleware(request);
 }
 
 export const config: MiddlewareConfig = {
