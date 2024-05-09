@@ -1,6 +1,8 @@
 'use client';
 
 import * as React from 'react';
+import { Button } from '~/components/ui/button';
+import { useSocketEvents } from '~/hooks';
 import { type Message } from '~/types';
 import { socket } from '~/utils';
 
@@ -11,41 +13,22 @@ export type ChatUiProps = {
 export function ChatUi(props: ChatUiProps) {
   const { messages } = props;
 
-  const [isConnected, setIsConnected] = React.useState(false);
-  const [transport, setTransport] = React.useState('N/A');
-
-  React.useEffect(() => {
-    if (socket.connected) {
-      onConnect();
-    }
-
-    function onConnect() {
-      setIsConnected(true);
-      setTransport(socket.io.engine.transport.name);
-    }
-
-    function onDisconnect() {
-      setIsConnected(false);
-      setTransport('N/A');
-    }
-
-    socket.on('connect', onConnect);
-    socket.on('disconnect', onDisconnect);
-
-    socket.on('message', data => {
-      console.log(data);
-    });
-
-    return () => {
-      socket.off('connect', onConnect);
-      socket.off('disconnect', onDisconnect);
-    };
-  }, []);
+  useSocketEvents(
+    React.useMemo(
+      () => [{ name: 'message:receive', handler: console.log }],
+      [],
+    ),
+  );
 
   return (
     <div>
-      <p>Status: {isConnected ? 'connected' : 'disconnected'}</p>
-      <p>Transport: {transport}</p>
+      <Button
+        onClick={() => {
+          socket.emit('message:send', 'Hello, world!');
+        }}
+      >
+        send message
+      </Button>
 
       {messages.map(message => (
         <div key={message.id}>
