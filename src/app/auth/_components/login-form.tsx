@@ -1,6 +1,5 @@
 'use client';
 
-import * as z from 'zod';
 import * as React from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm, useFormState } from 'react-hook-form';
@@ -20,13 +19,8 @@ import { toast } from 'sonner';
 import { getErrorMessage } from '~/utils/error';
 import HCaptcha from '@hcaptcha/react-hcaptcha';
 import { env } from '~/env';
-
-export const loginValidator = z.object({
-  email: z.string().email(),
-  password: z.string().min(8),
-});
-
-export type Login = z.infer<typeof loginValidator>;
+import { type Login } from '~/types';
+import { loginValidator } from '~/utils/validators';
 
 export function LoginForm() {
   const captcha = React.useRef<HCaptcha>(null);

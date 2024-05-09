@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { Button, type ButtonProps } from './button';
 import { UpdateIcon } from '@radix-ui/react-icons';
+import { cn } from '~/utils';
 
 export type SubmitButtonProps = ButtonProps & {
   isSubmitting: boolean;
@@ -10,7 +11,12 @@ export const SubmitButton = React.forwardRef<
   HTMLButtonElement,
   SubmitButtonProps
 >(({ isSubmitting, children, ...props }, ref) => (
-  <Button ref={ref} {...props}>
+  <Button
+    ref={ref}
+    disabled={isSubmitting}
+    className={cn(isSubmitting && 'cursor-not-allowed')}
+    {...props}
+  >
     {isSubmitting && (
       <UpdateIcon className='mr-2 size-4 animate-spin' aria-hidden='true' />
     )}

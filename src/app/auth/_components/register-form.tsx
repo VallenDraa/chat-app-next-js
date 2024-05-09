@@ -1,6 +1,4 @@
 'use client';
-
-import * as z from 'zod';
 import * as React from 'react';
 import { register } from '~/server/actions';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -20,13 +18,8 @@ import { toast } from 'sonner';
 import { getErrorMessage } from '~/utils/error';
 import HCaptcha from '@hcaptcha/react-hcaptcha';
 import { env } from '~/env';
-
-export const registerValidator = z.object({
-  email: z.string().email(),
-  password: z.string().min(8),
-});
-
-export type Register = z.infer<typeof registerValidator>;
+import { type Register } from '~/types';
+import { registerValidator } from '~/utils/validators';
 
 export function RegisterForm() {
   const captcha = React.useRef<HCaptcha>(null);
@@ -89,7 +82,7 @@ export function RegisterForm() {
           }}
         />
 
-        <SubmitButton isSubmitting={isSubmitting}>register</SubmitButton>
+        <SubmitButton isSubmitting={isSubmitting}>sign up</SubmitButton>
       </form>
     </Form>
   );
