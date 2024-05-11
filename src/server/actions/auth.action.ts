@@ -3,7 +3,12 @@
 import { revalidatePath } from 'next/cache';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
-import { createClient } from '~/server/external-services/supabase';
+import {
+  createAdminClient,
+  createClient,
+} from '~/server/external-services/supabase';
+import { AuthRepository, UsersRepository } from '~/server/repositories';
+import { loginValidator, registerValidator } from '~/utils/validators';
 
 export async function login(
   email: string,
@@ -14,17 +19,15 @@ export async function login(
     throw new Error('Captcha token is required');
   }
 
-  const supabase = createClient(cookies());
+  const { email: parsedEmail, password: parsedPassword } =
+    await loginValidator.parseAsync({ email, password });
 
-  const { error } = await supabase.auth.signInWithPassword({
-    email,
-    password,
-    options: { captchaToken },
-  });
+  const authRepo = new AuthRepository(
+    createClient(cookies()),
+    createAdminClient(cookies()),
+  );
 
-  if (error) {
-    throw error;
-  }
+  await authRepo.login(parsedEmail, parsedPassword, captchaToken);
 
   revalidatePath('/', 'layout');
   redirect('/');
@@ -32,6 +35,7 @@ export async function login(
 
 export async function register(
   email: string,
+  username: string,
   password: string,
   captchaToken: string | null,
 ) {
@@ -39,17 +43,30 @@ export async function register(
     throw new Error('Captcha token is required');
   }
 
+  const {
+    email: parsedEmail,
+    username: parsedUsername,
+    password: parsedPassword,
+  } = await registerValidator.parseAsync({ email, password, username });
+
   const supabase = createClient(cookies());
+  const supabaseAdmin = createAdminClient(cookies());
 
-  const { error } = await supabase.auth.signUp({
-    email,
-    password,
-    options: { captchaToken },
-  });
+  // Check if the username that is trying to be registered already taken
+  const usersRepo = new UsersRepository(supabase);
+  const user = await usersRepo.getUserByUsername(username);
 
-  if (error) {
-    throw error;
+  if (user) {
+    throw new Error('Username is already taken');
   }
+
+  const authRepo = new AuthRepository(supabase, supabaseAdmin);
+  await authRepo.register(
+    parsedEmail,
+    parsedUsername,
+    parsedPassword,
+    captchaToken,
+  );
 
   revalidatePath('/', 'layout');
   redirect('/');
