@@ -27,14 +27,14 @@ export function RegisterForm() {
 
   const form = useForm<Register>({
     resolver: zodResolver(registerValidator),
-    defaultValues: { email: '', password: '' },
+    defaultValues: { email: '', username: '', password: '' },
   });
 
   const { isSubmitting } = useFormState(form);
 
   async function onSubmit(data: Register) {
     try {
-      await register(data.email, data.password, captchaToken);
+      await register(data.email, data.username, data.password, captchaToken);
     } catch (error) {
       const errorMessage = getErrorMessage(error);
       toast.error(errorMessage);
@@ -54,6 +54,20 @@ export function RegisterForm() {
               <FormLabel>email</FormLabel>
               <FormControl>
                 <Input placeholder='johndoe@gmail.com' {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name='username'
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>username</FormLabel>
+              <FormControl>
+                <Input placeholder='johndoe123' {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>

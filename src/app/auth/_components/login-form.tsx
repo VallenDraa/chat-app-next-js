@@ -40,6 +40,8 @@ export function LoginForm() {
       const errorMessage = getErrorMessage(error);
       toast.error(errorMessage);
     }
+
+    captcha.current?.resetCaptcha();
   }
 
   return (
