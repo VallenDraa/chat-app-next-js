@@ -7,7 +7,11 @@
     "build": "next build",
     "dev": "tsx src/server.ts",
     "lint": "next lint && prettier --write .",
-    "start": "NODE_ENV=production tsx src/server.ts"
+    "start": "NODE_ENV=production tsx src/server.ts",
+    "supabase:db:pull": "supabase db pull",
+    "supabase:db:migrate": "supabase db migrate",
+    "supabase:db:gen": "supabase gen types typescript",
+    "supabase:db:gen:local": "supabase gen types typescript --local > ./src/types/database.types.ts"
   },
   "dependencies": {
     "@hcaptcha/react-hcaptcha": "^1.10.1",
