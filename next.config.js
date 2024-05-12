@@ -7,7 +7,10 @@ await import('./src/env.js');
 /** @type {import("next").NextConfig} */
 const config = {
   images: {
-    remotePatterns: [{ protocol: 'https', hostname: 'picsum.photos' }],
+    remotePatterns: [
+      { protocol: 'https', hostname: 'picsum.photos' },
+      { protocol: 'http', hostname: '127.0.0.1' },
+    ],
   },
 };
 
