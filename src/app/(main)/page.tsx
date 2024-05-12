@@ -1,11 +1,34 @@
-import { createClient } from '~/server/external-services/supabase';
-import { ChatUi } from './_components/chat-ui';
-import { cookies } from 'next/headers';
+import { getUserProfile } from '~/server/actions';
+import {
+  ChatUi,
+  Sidebar,
+  SidebarContent,
+  SidebarHeader,
+  UserProfileSection,
+} from './_components';
+import { CarouselItem } from '~/components/ui/carousel';
 
 export default async function Home() {
-  const { data: messages } = await createClient(cookies())
-    .from('messages')
-    .select('*');
+  const userProfile = await getUserProfile();
 
-  return <ChatUi messages={messages ?? []} />;
+  return (
+    <main className='flex'>
+      <div className='basis-1/3'>
+        <Sidebar>
+          <SidebarHeader>
+            <UserProfileSection {...userProfile} />
+          </SidebarHeader>
+          <SidebarContent>
+            <CarouselItem>1</CarouselItem>
+            <CarouselItem>2</CarouselItem>
+            <CarouselItem>3</CarouselItem>
+            <CarouselItem>4</CarouselItem>
+          </SidebarContent>
+        </Sidebar>
+      </div>
+      <div className='basis-3/4'>
+        <ChatUi messages={[]} />
+      </div>
+    </main>
+  );
 }
