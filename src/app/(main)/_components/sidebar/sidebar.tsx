@@ -8,7 +8,7 @@ export function Sidebar(props: SidebarProps) {
   const { children } = props;
 
   return (
-    <section className='relative h-screen w-80 bg-slate-50 shadow-inner shadow-white'>
+    <section className='relative flex h-screen w-80 flex-col bg-slate-50 shadow-inner shadow-white'>
       {children}
     </section>
   );
