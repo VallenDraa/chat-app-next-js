@@ -1,11 +1,12 @@
 import '~/styles/globals.css';
 
-import { Inter } from 'next/font/google';
+import { Fira_Mono } from 'next/font/google';
 import { Toaster } from '~/components/ui/sonner';
 
-const inter = Inter({
-  subsets: ['latin'],
-  variable: '--font-sans',
+const firaMono = Fira_Mono({
+  weight: ['400', '500', '700'],
+  variable: '--font-mono',
+  subsets: ['latin-ext'],
 });
 
 export const metadata = {
@@ -21,7 +22,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang='en'>
-      <body className={`font-sans ${inter.variable}`}>
+      <body className={`font-mono ${firaMono.variable}`}>
         {children}
         <Toaster />
       </body>
