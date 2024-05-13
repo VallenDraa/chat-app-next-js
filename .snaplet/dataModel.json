@@ -699,6 +699,42 @@
           "maxLength": null
         },
         {
+          "name": "auth_users_chat_rooms_user_one_idToauth_users",
+          "type": "auth_users",
+          "isRequired": true,
+          "kind": "object",
+          "relationName": "chat_rooms_user_one_idToauth_users",
+          "relationFromFields": [
+            "user_one_id"
+          ],
+          "relationToFields": [
+            "id"
+          ],
+          "isList": false,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        },
+        {
+          "name": "auth_users_chat_rooms_user_two_idToauth_users",
+          "type": "auth_users",
+          "isRequired": true,
+          "kind": "object",
+          "relationName": "chat_rooms_user_two_idToauth_users",
+          "relationFromFields": [
+            "user_two_id"
+          ],
+          "relationToFields": [
+            "id"
+          ],
+          "isList": false,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        },
+        {
           "name": "messages_lists",
           "type": "messages_lists",
           "isRequired": false,
@@ -1009,6 +1045,42 @@
           "hasDefaultValue": true,
           "isId": false,
           "maxLength": null
+        },
+        {
+          "name": "auth_users_friends_lists_user_one_idToauth_users",
+          "type": "auth_users",
+          "isRequired": true,
+          "kind": "object",
+          "relationName": "friends_lists_user_one_idToauth_users",
+          "relationFromFields": [
+            "user_one_id"
+          ],
+          "relationToFields": [
+            "id"
+          ],
+          "isList": false,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        },
+        {
+          "name": "auth_users_friends_lists_user_two_idToauth_users",
+          "type": "auth_users",
+          "isRequired": true,
+          "kind": "object",
+          "relationName": "friends_lists_user_two_idToauth_users",
+          "relationFromFields": [
+            "user_two_id"
+          ],
+          "relationToFields": [
+            "id"
+          ],
+          "isList": false,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
         }
       ],
       "uniqueConstraints": [
@@ -1855,6 +1927,24 @@
           "hasDefaultValue": true,
           "isId": false,
           "maxLength": null
+        },
+        {
+          "name": "auth_users",
+          "type": "auth_users",
+          "isRequired": true,
+          "kind": "object",
+          "relationName": "messagesToauth_users",
+          "relationFromFields": [
+            "user_id"
+          ],
+          "relationToFields": [
+            "id"
+          ],
+          "isList": false,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
         },
         {
           "name": "messages_lists",
@@ -5009,6 +5099,76 @@
           "hasDefaultValue": false
         },
         {
+          "name": "chat_rooms_chat_rooms_user_one_idToauth_users",
+          "type": "chat_rooms",
+          "isRequired": false,
+          "kind": "object",
+          "relationName": "chat_rooms_user_one_idToauth_users",
+          "relationFromFields": [],
+          "relationToFields": [],
+          "isList": true,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        },
+        {
+          "name": "chat_rooms_chat_rooms_user_two_idToauth_users",
+          "type": "chat_rooms",
+          "isRequired": false,
+          "kind": "object",
+          "relationName": "chat_rooms_user_two_idToauth_users",
+          "relationFromFields": [],
+          "relationToFields": [],
+          "isList": true,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        },
+        {
+          "name": "friends_lists_friends_lists_user_one_idToauth_users",
+          "type": "friends_lists",
+          "isRequired": false,
+          "kind": "object",
+          "relationName": "friends_lists_user_one_idToauth_users",
+          "relationFromFields": [],
+          "relationToFields": [],
+          "isList": true,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        },
+        {
+          "name": "friends_lists_friends_lists_user_two_idToauth_users",
+          "type": "friends_lists",
+          "isRequired": false,
+          "kind": "object",
+          "relationName": "friends_lists_user_two_idToauth_users",
+          "relationFromFields": [],
+          "relationToFields": [],
+          "isList": true,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        },
+        {
+          "name": "messages",
+          "type": "messages",
+          "isRequired": false,
+          "kind": "object",
+          "relationName": "messagesToauth_users",
+          "relationFromFields": [],
+          "relationToFields": [],
+          "isList": true,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        },
+        {
           "name": "public_users",
           "type": "public_users",
           "isRequired": false,
@@ -5102,11 +5262,11 @@
           "maxLength": null
         },
         {
-          "id": "public.users.profile_picture",
-          "name": "profile_picture",
-          "columnName": "profile_picture",
-          "type": "text",
-          "isRequired": false,
+          "id": "public.users.username",
+          "name": "username",
+          "columnName": "username",
+          "type": "varchar",
+          "isRequired": true,
           "kind": "scalar",
           "isList": false,
           "isGenerated": false,
@@ -5120,7 +5280,7 @@
           "name": "profile_status",
           "columnName": "profile_status",
           "type": "varchar",
-          "isRequired": false,
+          "isRequired": true,
           "kind": "scalar",
           "isList": false,
           "isGenerated": false,
@@ -5130,10 +5290,10 @@
           "maxLength": null
         },
         {
-          "id": "public.users.username",
-          "name": "username",
-          "columnName": "username",
-          "type": "varchar",
+          "id": "public.users.profile_picture",
+          "name": "profile_picture",
+          "columnName": "profile_picture",
+          "type": "text",
           "isRequired": true,
           "kind": "scalar",
           "isList": false,
@@ -5195,13 +5355,6 @@
           "name": "users_pkey",
           "fields": [
             "id"
-          ],
-          "nullNotDistinct": false
-        },
-        {
-          "name": "users_username_key",
-          "fields": [
-            "username"
           ],
           "nullNotDistinct": false
         }
