@@ -30,6 +30,10 @@ type CarouselContextProps = {
   canScrollNext: boolean;
 } & CarouselProps;
 
+type CarouselContentProps = React.HTMLAttributes<HTMLDivElement> & {
+  wrapperClassName?: React.HTMLProps<HTMLElement>['className'];
+};
+
 const CarouselContext = React.createContext<CarouselContextProps | null>(null);
 
 function useCarousel() {
@@ -150,26 +154,28 @@ const Carousel = React.forwardRef<
 );
 Carousel.displayName = 'Carousel';
 
-const CarouselContent = React.forwardRef<
-  HTMLDivElement,
-  React.HTMLAttributes<HTMLDivElement>
->(({ className, ...props }, ref) => {
-  const { carouselRef, orientation } = useCarousel();
+const CarouselContent = React.forwardRef<HTMLDivElement, CarouselContentProps>(
+  ({ className, wrapperClassName, ...props }, ref) => {
+    const { carouselRef, orientation } = useCarousel();
 
-  return (
-    <div ref={carouselRef} className='overflow-hidden'>
+    return (
       <div
-        ref={ref}
-        className={cn(
-          'flex',
-          orientation === 'horizontal' ? '-ml-4' : '-mt-4 flex-col',
-          className,
-        )}
-        {...props}
-      />
-    </div>
-  );
-});
+        ref={carouselRef}
+        className={cn('overflow-hidden', wrapperClassName)}
+      >
+        <div
+          ref={ref}
+          className={cn(
+            'flex',
+            orientation === 'horizontal' ? '-ml-4' : '-mt-4 flex-col',
+            className,
+          )}
+          {...props}
+        />
+      </div>
+    );
+  },
+);
 CarouselContent.displayName = 'CarouselContent';
 
 const CarouselItem = React.forwardRef<
