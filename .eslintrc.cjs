@@ -14,6 +14,7 @@ const config = {
     'prettier',
   ],
   rules: {
+    'no-console': 'warn',
     '@typescript-eslint/triple-slash-reference': 'off',
     '@typescript-eslint/naming-convention': [
       'warn',
