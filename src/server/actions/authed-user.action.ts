@@ -9,7 +9,7 @@ import { cookies } from 'next/headers';
 import { type UserUpdate } from '~/types';
 import { userProfileDto } from '~/server/dtos';
 
-export async function getUserProfile() {
+export async function getAuthedUserProfile() {
   const cookiesStore = cookies();
 
   const authedUserRepository = new AuthedUserRepository(
@@ -17,11 +17,11 @@ export async function getUserProfile() {
     createAdminClient(cookiesStore),
   );
 
-  const user = await authedUserRepository.getUser();
+  const user = await authedUserRepository.getAuthedUser();
   return userProfileDto(user);
 }
 
-export async function editUser(newAttr: UserUpdate) {
+export async function getAuthedUserId() {
   const cookiesStore = cookies();
 
   const authedUserRepository = new AuthedUserRepository(
@@ -29,10 +29,12 @@ export async function editUser(newAttr: UserUpdate) {
     createAdminClient(cookiesStore),
   );
 
-  return authedUserRepository.editUser(newAttr);
+  const user = await authedUserRepository.getAuthedUser();
+
+  return user.id;
 }
 
-export async function deleteUser() {
+export async function editAuthedUser(newAttr: UserUpdate) {
   const cookiesStore = cookies();
 
   const authedUserRepository = new AuthedUserRepository(
@@ -40,5 +42,16 @@ export async function deleteUser() {
     createAdminClient(cookiesStore),
   );
 
-  return authedUserRepository.deleteUser();
+  return authedUserRepository.editAuthedUser(newAttr);
+}
+
+export async function deleteAuthedUser() {
+  const cookiesStore = cookies();
+
+  const authedUserRepository = new AuthedUserRepository(
+    createClient(cookiesStore),
+    createAdminClient(cookiesStore),
+  );
+
+  return authedUserRepository.deleteAuthedUser();
 }

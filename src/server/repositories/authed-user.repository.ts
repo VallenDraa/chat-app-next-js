@@ -27,7 +27,7 @@ export class AuthedUserRepository {
     return user;
   }
 
-  async getUser() {
+  async getAuthedUser() {
     const supabaseUserInfo = await this.getSupabaseUserInfo();
 
     const { data: user, error } = await this.supabase
@@ -43,8 +43,8 @@ export class AuthedUserRepository {
     return user;
   }
 
-  async editUser(newAttr: UserUpdate) {
-    const user = await this.getUser();
+  async editAuthedUser(newAttr: UserUpdate) {
+    const user = await this.getAuthedUser();
 
     const { error } = await this.supabase
       .from('users')
@@ -56,7 +56,7 @@ export class AuthedUserRepository {
     }
   }
 
-  async updatePassword(newPassword: string) {
+  async updateAuthedUserPassword(newPassword: string) {
     const { error } = await this.supabaseAdmin.auth.updateUser({
       password: newPassword,
     });
@@ -66,8 +66,8 @@ export class AuthedUserRepository {
     }
   }
 
-  async deleteUser() {
-    const user = await this.getUser();
+  async deleteAuthedUser() {
+    const user = await this.getAuthedUser();
 
     if (!user) {
       throw new Error('No user found!');
