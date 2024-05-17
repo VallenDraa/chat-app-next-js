@@ -9,7 +9,7 @@ export function SidebarPage(props: SidebarPageProps) {
 
   return (
     <CarouselItem>
-      <div className='p-2'>{children}</div>
+      <div className='flex h-full flex-col p-2'>{children}</div>
     </CarouselItem>
   );
 }

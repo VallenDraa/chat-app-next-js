@@ -9,6 +9,8 @@ const config = {
   images: {
     remotePatterns: [
       { protocol: 'https', hostname: 'picsum.photos' },
+      { protocol: 'https', hostname: 'avatars.githubusercontent.com' },
+      { protocol: 'https', hostname: 'cloudflare-ipfs.com' },
       { protocol: 'http', hostname: '127.0.0.1' },
     ],
   },

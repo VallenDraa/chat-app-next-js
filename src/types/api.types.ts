@@ -10,3 +10,12 @@ export type ApiResponse<T> = BaseApiResponse & {
 export type ErrorApiResponse = BaseApiResponse & {
   error: string;
 };
+
+export type PaginationArgs = {
+  page?: number;
+  limit?: number;
+};
+export type PaginatedResponse<T> = Required<PaginationArgs> & {
+  data: T;
+  lastPage: number;
+};

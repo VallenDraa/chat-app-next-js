@@ -1,14 +1,9 @@
-import { type Database } from './database.types';
+import { type usersTable } from '~/server/db';
 
-export type User = Database['public']['Tables']['users']['Row'];
-export type UserUpdate = Omit<
-  Database['public']['Tables']['users']['Update'],
-  'id' | 'created_at' | 'updated_at' | 'profile_picture'
+export type User = typeof usersTable.$inferSelect;
+export type UserInsert = typeof usersTable.$inferInsert;
+export type UserUpdate = Partial<
+  Omit<User, 'id' | 'createdAt' | 'updatedAt' | 'userId'>
 >;
 
-export type UserProfile = {
-  username: string;
-  profilePicture: string | null;
-  profileStatus: string | null;
-  createdAt: string;
-};
+export type UserProfile = Omit<User, 'id' | 'updatedAt' | 'userId'>;

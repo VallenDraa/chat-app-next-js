@@ -2,7 +2,10 @@ import {
   type SupabaseClient,
   type SupabaseAdminClient,
 } from '~/server/external-services/supabase';
-import { type UserUpdate } from '~/types';
+import { type UserUpdate, type User } from '~/types';
+import { db, usersTable } from '~/server/db';
+import { eq } from 'drizzle-orm';
+import { type User as SupabaseUser } from '@supabase/supabase-js';
 
 export class AuthedUserRepository {
   constructor(
@@ -10,13 +13,18 @@ export class AuthedUserRepository {
     private readonly supabaseAdmin: SupabaseAdminClient,
   ) {}
 
-  async getSupabaseUserInfo() {
+  async getSupabaseUserInfo(): Promise<SupabaseUser> {
     const {
       data: { user },
       error,
     } = await this.supabase.auth.getUser();
 
     if (error) {
+      // eslint-disable-next-line no-console
+      console.log(
+        '🚀 ~ AuthedUserRepository ~ getSupabaseUserInfo ~ error:',
+        error,
+      );
       throw error;
     }
 
@@ -27,46 +35,47 @@ export class AuthedUserRepository {
     return user;
   }
 
-  async getAuthedUser() {
+  async getAuthedUser(): Promise<User> {
     const supabaseUserInfo = await this.getSupabaseUserInfo();
 
-    const { data: user, error } = await this.supabase
-      .from('users')
-      .select('*')
-      .eq('id', supabaseUserInfo.id)
-      .single();
+    const [user] = await db
+      .select()
+      .from(usersTable)
+      .where(eq(usersTable.userId, supabaseUserInfo.id));
 
-    if (error) {
+    if (!user) {
       throw new Error("Cannot get user's information!");
     }
 
     return user;
   }
 
-  async editAuthedUser(newAttr: UserUpdate) {
+  async editAuthedUser(newAttr: UserUpdate): Promise<void> {
     const user = await this.getAuthedUser();
 
-    const { error } = await this.supabase
-      .from('users')
-      .update(newAttr)
-      .eq('id', user.id);
-
-    if (error) {
-      throw new Error("Cannot update user's information!");
+    if (!user) {
+      throw new Error('No user found!');
     }
+
+    await db.update(usersTable).set(newAttr).where(eq(usersTable.id, user.id));
   }
 
-  async updateAuthedUserPassword(newPassword: string) {
+  async updateAuthedUserPassword(newPassword: string): Promise<void> {
     const { error } = await this.supabaseAdmin.auth.updateUser({
       password: newPassword,
     });
 
     if (error) {
+      // eslint-disable-next-line no-console
+      console.log(
+        '🚀 ~ AuthedUserRepository ~ updateAuthedUserPassword ~ error:',
+        error,
+      );
       throw new Error("Cannot update user's password information!");
     }
   }
 
-  async deleteAuthedUser() {
+  async deleteAuthedUser(): Promise<void> {
     const user = await this.getAuthedUser();
 
     if (!user) {
@@ -79,6 +88,11 @@ export class AuthedUserRepository {
       .eq('id', user.id);
 
     if (userDeletionError) {
+      // eslint-disable-next-line no-console
+      console.log(
+        '🚀 ~ AuthedUserRepository ~ deleteAuthedUser ~ userDeletionError:',
+        userDeletionError,
+      );
       throw new Error("Cannot delete user's information!");
     }
 
@@ -86,6 +100,11 @@ export class AuthedUserRepository {
       await this.supabaseAdmin.auth.admin.deleteUser(user.id);
 
     if (authDeletionError) {
+      // eslint-disable-next-line no-console
+      console.log(
+        '🚀 ~ AuthedUserRepository ~ deleteAuthedUser ~ authDeletionError:',
+        authDeletionError,
+      );
       throw authDeletionError;
     }
   }

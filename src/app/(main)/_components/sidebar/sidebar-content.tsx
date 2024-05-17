@@ -28,7 +28,10 @@ export function SidebarContent(props: SidebarContentProps) {
   return (
     <Carousel setApi={setCarouselApi} className='flex grow flex-col'>
       <SidebarPagesMenu onPageChange={handleChangeSidebarPage} />
-      <CarouselContent className='h-full' wrapperClassName='h-full'>
+      <CarouselContent
+        className='h-full'
+        wrapperClassName='flex flex-col h-full'
+      >
         {children}
       </CarouselContent>
     </Carousel>

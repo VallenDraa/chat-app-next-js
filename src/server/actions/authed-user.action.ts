@@ -31,7 +31,7 @@ export async function getAuthedUserId() {
 
   const user = await authedUserRepository.getAuthedUser();
 
-  return user.id;
+  return user.userId;
 }
 
 export async function editAuthedUser(newAttr: UserUpdate) {

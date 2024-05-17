@@ -1,15 +1,16 @@
-import { getUserProfile } from '~/server/actions';
+import { getAuthedUserProfile } from '~/server/actions';
 import {
   ChatUi,
+  FriendsSidebarPage,
   Sidebar,
   SidebarContent,
   SidebarHeader,
+  SidebarPage,
   UserProfileSection,
 } from './_components';
-import { CarouselItem } from '~/components/ui/carousel';
 
 export default async function Home() {
-  const userProfile = await getUserProfile();
+  const userProfile = await getAuthedUserProfile();
 
   return (
     <main className='flex'>
@@ -19,10 +20,9 @@ export default async function Home() {
             <UserProfileSection {...userProfile} />
           </SidebarHeader>
           <SidebarContent>
-            <CarouselItem>1</CarouselItem>
-            <CarouselItem>2</CarouselItem>
-            <CarouselItem>3</CarouselItem>
-            <CarouselItem>4</CarouselItem>
+            <SidebarPage>Chat</SidebarPage>
+            <FriendsSidebarPage />
+            <SidebarPage>Notifications</SidebarPage>
           </SidebarContent>
         </Sidebar>
       </div>

@@ -22,7 +22,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang='en'>
-      <body className={`font-mono ${firaMono.variable}`}>
+      <body
+        className={`font-mono ${firaMono.variable} h-screen overflow-hidden`}
+      >
         {children}
         <Toaster />
       </body>

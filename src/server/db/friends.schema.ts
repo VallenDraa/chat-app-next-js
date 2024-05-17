@@ -13,7 +13,7 @@ export const friendsListsTable = pgTable('friends_lists', {
   userOneId: uuid('user_one_id')
     .notNull()
     .references(() => authUsersTable.id),
-  userTwoID: uuid('user_two_id')
+  userTwoId: uuid('user_two_id')
     .notNull()
     .references(() => authUsersTable.id),
   createdAt: timestamp('created_at').notNull().defaultNow(),

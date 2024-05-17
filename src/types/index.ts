@@ -3,3 +3,4 @@ export * from './database.types';
 export * from './messages.types';
 export * from './auth.types';
 export * from './user.types';
+export * from './friends-lists.types';
