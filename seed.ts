@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/naming-convention */
 /**
  * ! Executing this script will delete all data in your database and seed it with 10 auth_users.
  * ! Make sure to adjust the script to your needs.
@@ -26,27 +27,48 @@ const PASSWORD = '@Test12345';
 
 for (let i = 0; i < 300; i++) {
   // eslint-disable-next-line no-await-in-loop
-  await supabase.auth.admin.createUser({
+  await supabase.auth.signUp({
     email: `user${i}@mail.com`,
     password: PASSWORD,
   });
 }
 
-await seed.public_users(x =>
-  x(300, ({ index }) => ({
-    username: copycat.username(index),
-    profile_picture: faker.image.avatar(),
-    profile_status: copycat.words(index, { min: 1, max: 8 }),
-  })),
-);
-await seed.friends_lists(x => x(600));
+const {
+  data: { users: auth_users },
+} = await supabase.auth.admin.listUsers({
+  perPage: 300,
+  page: 1,
+});
 
-await seed.messages(x =>
-  x(1000, ({ index }) => ({
-    content: copycat.words(index, { min: 5, max: 32 }),
-  })),
+await seed.public_users(
+  x =>
+    x(300, ({ seed, index }) => ({
+      user_id: auth_users[index]!.id,
+      username: copycat.username(seed),
+      profile_picture: faker.image.avatar(),
+      profile_status: copycat.words(seed, { min: 1, max: 8 }),
+    })),
+  { connect: { auth_users } },
 );
-await seed.messages_lists(x => x(1000));
-await seed.chat_rooms(x => x(150));
+await seed.friends_lists(x => x(300), { connect: { auth_users } });
+
+// Seed chat rooms and collect data
+const { chat_rooms } = await seed.chat_rooms(x => x(150), {
+  connect: { auth_users },
+});
+
+// Seed messages lists and collect data
+const { messages_lists } = await seed.messages_lists(x => x(150), {
+  connect: { chat_rooms },
+});
+
+// Seed messages
+await seed.messages(
+  x =>
+    x(1000, ({ seed }) => ({
+      content: copycat.words(seed, { min: 5, max: 32 }),
+    })),
+  { connect: { auth_users, messages_lists } },
+);
 
 process.exit();
