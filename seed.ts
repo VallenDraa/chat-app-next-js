@@ -50,7 +50,7 @@ await seed.public_users(
     })),
   { connect: { auth_users } },
 );
-await seed.friends_lists(x => x(300), { connect: { auth_users } });
+await seed.friends_lists(x => x(60000), { connect: { auth_users } });
 
 // Seed chat rooms and collect data
 const { chat_rooms } = await seed.chat_rooms(x => x(150), {
@@ -65,7 +65,7 @@ const { messages_lists } = await seed.messages_lists(x => x(150), {
 // Seed messages
 await seed.messages(
   x =>
-    x(1000, ({ seed }) => ({
+    x(100000, ({ seed }) => ({
       content: copycat.words(seed, { min: 5, max: 32 }),
     })),
   { connect: { auth_users, messages_lists } },
