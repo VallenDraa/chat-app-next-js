@@ -20,12 +20,13 @@ export function UserProfileButton(props: UserProfilProps) {
     >
       <Image
         alt={username}
-        src={profilePicture ?? env.NEXT_PUBLIC_DEFAULT_LIGHT_PROFILE_PICTURE}
+        src={profilePicture || env.NEXT_PUBLIC_DEFAULT_LIGHT_PROFILE_PICTURE}
         height={50}
         width={50}
+        className='rounded-full'
       />
 
-      <div className='flex flex-col items-start justify-end'>
+      <div className='overflow-hidden text-left'>
         <p className='truncate font-semibold'>{username}</p>
         <p className='truncate text-sm font-normal text-muted-foreground'>
           {profileStatus || 'add status'}
