@@ -1,5 +1,5 @@
 import { pgTable, uuid, timestamp, pgEnum, text } from 'drizzle-orm/pg-core';
-import { messagesListsTable, authUsersTable } from './schema';
+import { messagesListsTable, usersTable } from './schema';
 
 export const messageStatusEnum = pgEnum('message_status', [
   'FAIL',
@@ -19,7 +19,7 @@ export const messagesTable = pgTable('messages', {
     .default('SENDING'),
   userId: uuid('user_id')
     .notNull()
-    .references(() => authUsersTable.id),
+    .references(() => usersTable.userId),
   messageListId: uuid('message_list_id')
     .notNull()
     .references(() => messagesListsTable.id),

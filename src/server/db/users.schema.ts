@@ -17,6 +17,7 @@ export const usersTable = pgTable('users', {
   id: uuid('id').primaryKey(),
   userId: uuid('user_id')
     .references(() => authUsersTable.id)
+    .unique()
     .notNull(),
   username: text('username').notNull().unique(),
   profilePicture: text('profile_picture'),

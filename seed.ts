@@ -40,21 +40,22 @@ const {
   page: 1,
 });
 
-await seed.public_users(
+const { public_users } = await seed.public_users(
   x =>
     x(300, ({ seed, index }) => ({
-      user_id: auth_users[index]!.id,
+      user_id: auth_users[index]!.id, // Ensure unique user_id by referencing auth_users
       username: copycat.username(seed),
       profile_picture: faker.image.avatar(),
       profile_status: copycat.words(seed, { min: 1, max: 8 }),
     })),
   { connect: { auth_users } },
 );
-await seed.friends_lists(x => x(60000), { connect: { auth_users } });
+
+await seed.friends_lists(x => x(60000), { connect: { public_users } });
 
 // Seed chat rooms and collect data
 const { chat_rooms } = await seed.chat_rooms(x => x(150), {
-  connect: { auth_users },
+  connect: { public_users },
 });
 
 // Seed messages lists and collect data
@@ -68,7 +69,7 @@ await seed.messages(
     x(100000, ({ seed }) => ({
       content: copycat.words(seed, { min: 5, max: 32 }),
     })),
-  { connect: { auth_users, messages_lists } },
+  { connect: { public_users, messages_lists } },
 );
 
 process.exit();

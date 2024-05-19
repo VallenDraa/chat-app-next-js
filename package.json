@@ -9,11 +9,12 @@
     "lint": "next lint && prettier --write .",
     "start": "NODE_ENV=production tsx src/server.ts",
     "db:pull": "supabase db pull",
+    "db:reset": "supabase db reset",
     "db:push": " drizzle-kit push",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
     "db:seed": "tsx seed.ts",
-    "db:seed:sync": "pnpx @snaplet/seed sync"
+    "db:seed:sync": "snaplet-seed sync"
   },
   "dependencies": {
     "@hcaptcha/react-hcaptcha": "^1.10.1",
@@ -38,6 +39,9 @@
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-hook-form": "^7.51.3",
+    "react-virtualized-auto-sizer": "^1.0.24",
+    "react-window": "^1.8.10",
+    "react-window-infinite-loader": "^1.0.9",
     "server-only": "^0.0.1",
     "socket.io": "^4.7.5",
     "socket.io-client": "^4.7.5",
@@ -56,6 +60,8 @@
     "@types/node": "^20.11.20",
     "@types/react": "^18.2.57",
     "@types/react-dom": "^18.2.19",
+    "@types/react-window": "^1.8.8",
+    "@types/react-window-infinite-loader": "^1.0.9",
     "@typescript-eslint/eslint-plugin": "^7.1.1",
     "@typescript-eslint/parser": "^7.1.1",
     "cypress": "^13.8.1",
